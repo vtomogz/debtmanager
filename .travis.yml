@@ -18,5 +18,4 @@ deploy:
   on:
     repo: vtomogz/debtmanager
   skip_cleanup: 'true'
-after_deploy:
-- heroku run mix ecto.migrate -a shielded-eyrie-94049
+  run: "mix ecto.migrate -a shielded-eyrie-94049"
