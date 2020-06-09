@@ -7,10 +7,8 @@ addons:
   postgresql: '11.7'
 service:
   - postgresql
-env:
-  - MIX_ENV=test
 before_script:
   - cp config/travis.exs config/test.exs
-  - mix do ecto.create
+  - MIX_ENV=test mix do ecto.create
 script:
-  - mix do deps.get, ecto.migrate, test
+  - MIX_ENV=test mix do deps.get, ecto.migrate, test
