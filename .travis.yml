@@ -3,13 +3,10 @@ elixir:
   - '1.10.3'
 otp_release:
   - '23.0'
-addons:
-  postgresql: '11.7'
 service:
   - postgresql
 before_script:
-  -  sudo host all postgres localhost trust
   - cp config/travis.exs config/test.exs
-  - MIX_ENV=test mix do ecto.create
+  - MIX_ENV=test mix do ecto.setup
 script:
   - MIX_ENV=test mix do deps.get, ecto.migrate, test
