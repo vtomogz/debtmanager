@@ -14,7 +14,6 @@ deploy:
   provider: heroku
   app: shielded-eyrie-94049
   buildpack: https://github.com/HashNuke/heroku-buildpack-elixir.git
-  strategy: git-ssh
   api_key:
     secure: jKAsB9u3hF/u2lgSbxKsI4y1nZxrFHg1RUeS+A5h+gildKWIXP5RzkCx9BvRsovy1Wd5q/+0qVxAKMChYowaDcu8cuhQpEEPWVC0z0cKkkRtf9ajEWfQrrExV5Z0NGNFngJftyVFXgvdlH1s5rz1SQZhpGeMTHKVKCg/GahdwwBeHfO4NeNSknlyvTJULxhF6kwNtClzqveXo5ljTTx8z2OyjLGblcWMw1RIFHwTAYyZyIG5q5YrlmG1PKF/1SeoFFE9lnGhnTCEvxXj+PM82xdNYZuw8ATLgfM/rwGB+MRogcdJykKESIBl1EHOtEaA48zY0cwEBaR3gzEArVfdtSrDaUXO79icB62wl5g6lJDQ+irKnsIPIVkEH2Wpol9G0b1TW3oaJfkepAfAYnPuflP8QbqoW07/FGDSi6ewklUODw4sSFs8kChyJ0/IvbflX+mkGKLh+QBaSZqJpL+pDJCyg3myWMCvDO9WRmilXcmOuUTSQblrDEKrdy6MDeB+QmJNaTXUrVp4TWHOBRuhd4O1JIimdceH+mEwjaulGdkye8tMs2YnoMjhoDP7i+mwGYNPve5ST6HnV8sUtzTsEimHo+u6Pa6RPM4BJc87SBdgVOmD7A9fePeMct8LlGCM/YHDBhz5lg8wya5RFDBXl6+h/nIdOq6sz0J6qYd/eOM=
 after_deploy:
