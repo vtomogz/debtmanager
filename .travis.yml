@@ -5,8 +5,12 @@ otp_release:
   - '23.0'
 addons:
   postgresql: '11.7'
+service:
+  - postgresql
 before_script:
   - cp config/travis.exs config/test.exs
-  - mix deps.get
-  - mix deps.compile
-  - mix ecto.setup
+script:
+  - mix deps.get --only test
+  - mix ecto.create
+  - mix ecto.migrate
+  - mix test

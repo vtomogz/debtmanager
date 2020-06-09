@@ -7,6 +7,7 @@ use Mix.Config
 # Run `mix help test` for more information.
 config :debtmanager, Debtmanager.Repo,
   username: "postgres",
+  password: "",
   database: "debtmanager_test#{System.get_env("MIX_TEST_PARTITION")}",
   hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox
@@ -14,7 +15,7 @@ config :debtmanager, Debtmanager.Repo,
 # We don't run a server during test. If one is required,
 # you can enable the server option below.
 config :debtmanager, DebtmanagerWeb.Endpoint,
-  http: [port: 4002],
+  http: [port: 5432],
   server: false
 
 # Print only warnings and errors during test
