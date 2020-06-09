@@ -1,5 +1,6 @@
 defmodule DebtmanagerWeb.Router do
   use DebtmanagerWeb, :router
+  use Pow.Phoenix.Router
 
   pipeline :browser do
     plug :accepts, ["html"]
@@ -11,6 +12,12 @@ defmodule DebtmanagerWeb.Router do
 
   pipeline :api do
     plug :accepts, ["json"]
+  end
+
+  scope "/" do
+    pipe_through :browser
+
+    pow_routes()
   end
 
   scope "/", DebtmanagerWeb do

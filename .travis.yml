@@ -9,13 +9,13 @@ before_script:
 - cp config/travis.exs config/test.exs
 - MIX_ENV=test mix do ecto.setup
 script:
-- MIX_ENV=test mix do deps.get, ecto.migrate, test
-deploy:
-  provider: heroku
-  api_key:
-    secure: owQuKSkHSJxUc8txmF69nO9qkDr9UO+n7Vzpwk3MXmjXwMB2PmWv5aTeJZTx8Beq2NQA2Ob10PD6N3BPawVXi36u96SFkndLWiCs03GQ0pnffCtuRjGXPwCClbKnGI1UTFyBjPNMqtLB2dLShccRjsLG2jvqQU2tk9sauIVSYfdYKQ5Q29RUSXZdbsG/hzpoFTzfx/86+TT8d3IoNzf2GP45ngUXOK+nEm2s+8Pkgw41c92LeHwKvSYloSJl+Szpq1xJBoL/5zZHUr+2wDsLOFr0UvWZBLCu+BmvwqdhiyqsREYuI9p/i7hL7x5HzYNpQT1RZr3vXpx1qBONJzPUV+0WDjU9BnVghpBh7Tne8CCOUadqxpa9d9C4uE4hTJr7ApifsGKCdUQtogOpi263MBihamAmzRSes7V2uavtFqYod2F1gpni2wkjjXsg6Wx6I+c54IwY3ohAFWwpYIh3eVyoR4Jy7XqL2JYXvjd0dIDBe54+sswLzZCIuQatf5UUz6T5H4HCDhS8gHROD20PaybdcxwUhbqWx4hJvfl3ROqvzWqYNrVOG4UJh6COAOgA4+c3ktSINCgfn5K3As/vWFxN0FmvnLEE0MUmLg4LFc/6S7gahNJ9jUmCMd8jnhUYRsfpCVYGGaUgc/cgeZw5FFqJE24ZbNXDZtNSfAqlxyY=
-  app: shielded-eyrie-94049
-  on:
-    repo: vtomogz/debtmanager
-  skip_cleanup: 'true'
-  run: "mix ecto.migrate -a shielded-eyrie-94049"
+- MIX_ENV=test mix do deps.get, deps.compile, ecto.migrate, test
+#deploy:
+#  provider: heroku
+#  api_key:
+#    secure: owQuKSkHSJxUc8txmF69nO9qkDr9UO+n7Vzpwk3MXmjXwMB2PmWv5aTeJZTx8Beq2NQA2Ob10PD6N3BPawVXi36u96SFkndLWiCs03GQ0pnffCtuRjGXPwCClbKnGI1UTFyBjPNMqtLB2dLShccRjsLG2jvqQU2tk9sauIVSYfdYKQ5Q29RUSXZdbsG/hzpoFTzfx/86+TT8d3IoNzf2GP45ngUXOK+nEm2s+8Pkgw41c92LeHwKvSYloSJl+Szpq1xJBoL/5zZHUr+2wDsLOFr0UvWZBLCu+BmvwqdhiyqsREYuI9p/i7hL7x5HzYNpQT1RZr3vXpx1qBONJzPUV+0WDjU9BnVghpBh7Tne8CCOUadqxpa9d9C4uE4hTJr7ApifsGKCdUQtogOpi263MBihamAmzRSes7V2uavtFqYod2F1gpni2wkjjXsg6Wx6I+c54IwY3ohAFWwpYIh3eVyoR4Jy7XqL2JYXvjd0dIDBe54+sswLzZCIuQatf5UUz6T5H4HCDhS8gHROD20PaybdcxwUhbqWx4hJvfl3ROqvzWqYNrVOG4UJh6COAOgA4+c3ktSINCgfn5K3As/vWFxN0FmvnLEE0MUmLg4LFc/6S7gahNJ9jUmCMd8jnhUYRsfpCVYGGaUgc/cgeZw5FFqJE24ZbNXDZtNSfAqlxyY=
+#  app: shielded-eyrie-94049
+#  on:
+#    repo: vtomogz/debtmanager
+#  skip_cleanup: 'true'
+#  run: "mix ecto.migrate -a shielded-eyrie-94049"
