@@ -1,8 +1,24 @@
+language: elixir
+otp_release:
+- 23.0
+addons:
+  postgresql: '11.7'
+before_script:
+- cp config/travis.exs config/test.exs
+- npm install -g brunch
+- npm install
+- brunch build --production
+- mix phoenix.digest
+- git config --global user.email "youremail@yourdomain.com"
+- git config --global user.name "Your Name"
+- git add priv && git commit -m "Heroku assets"
+- MIX_ENV=test mix do deps.get, deps.compile, ecto.create, ecto.migrate
 deploy:
   provider: heroku
+  app: location-game
+  buildpack: https://github.com/HashNuke/heroku-buildpack-elixir.git
+  strategy: git-ssh
   api_key:
-    secure: jDAlJw5PlTVsgzp+WtS7aogYURzHTXMMXeKMM0beXYSDLMQL3xnbdBTA++uSlDWflyL+V6xHybfRsN18SGw0JzoaUiS5RdxIvbyxYzVDE4Q5a9ekhUNH1XerT3z3WhRcXgnB7+PS5W33XqV00yrwLmQz56fOwYtsxY83IqoAWekWGNSjhpQLayenp4PR9oStM2d1MwQRrcSfnG21zJ3z3gsVBYQunkrrCTt7I1dj2bS88k80c1WYL2VIVYFmjr2hdtX2LwjAhMMYoCFQ8O+xIZ7FtIByfTlfBI9iQ6kdXjDJnKjio79vSmXs46zcI89bNGFb5uLoEQ8c4UWsbpU4JSHqjT4YKz6OOwXBjf7pR9l+oW398ZxyIsjnq/YCLKBAHIr3cENEBMZV0Cynb/l3l8xte/mo3fivJhOs0C3WMam9zm2Tzxd4LyBSIC8MFTR4hKUpFndBQGculTtD6enpMpzE2bCrytQLY3exXs645cIxIeSY9CQcuVZOTBuqW1Z7LhD41iMfl1BR1s7HFKBw6ywzbWYNt6L5ywj/aMd2kAY4kjhvLwEXjSbJOdBSyNcUyO3tMlcHvnkwoq+bO/hi4F4YEXT9lPPEC/lZI7brETAOoC36eKzx82kQHdU9h2yJEIVslUrLe9ncP+C8YkWfor1fJjN8qVvP+GBGw+R0cCY=
-  app: shielded-eyrie-94049
-  on:
-    repo: vtomogz/debtmanager
-  skip_cleanup: 'true'
+    secure: cSKoccoh5SIwoTZ8B75aXnUS8VE+apv73JVUZHHJ3VBMM5Yzu16EOnlIyP1JgjIEVN8mdM+7csqJSab9lrFTkpbjR5FhdBsr6lp5OhvcKnBsk3YDRjq6jLRG5nxa08kR18A9+lLKC+s6pTHWY4KS1iL+1g9U2ewcTJBsO4mfIoTwKdAHvwaV0hCz/m1EovjUEui1slOvZ2U5+dZ5fWDNYpDajqoF4poEsBM6oqj+4+LUJT2nGw2eIjKhVRG+sKGKgQgkgAfunAyf3cqJLSWtX0PDfNV9yQdEnpxBzJbn3GvBHz+FZRuyJ5e5dLzsGx3xWCCFyH9UHiP+PcoYN2S5PyvDWdKnWnQQvK4L4VFb+/9bJhXGcLXmcfpd0tIbeNPAN+mVrMftsRVavXwVIJYw0i4XCRapg6EAsXBiqPw8TZ2/S6Kgpkrv+yedGJ1/2ZrOFFIMMCJ4SLHgPaUM7YmBw98Zx0bGpJfLrKiJI95/nstRDt5u0bw5mNUe9XkXrpsRO7+VJ08F9WubZiTkfGennpiFMTU/QkRsB3SDNs6HS2JmjUgJsKUlX7jlwbxdSR6e+7EenYmUAxd7cridNaZyhEVOVyye7wdOmSK/f3FTEpGy9tmwOiEqZuP93NJLqjX++dNFbxde4AyPIki1Dv74UEyrvp8auKyhPpPs3eDNqbU=
+after_deploy:
+- heroku run "mix ecto.migrate" -a location-game
