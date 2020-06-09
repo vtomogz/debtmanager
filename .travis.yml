@@ -11,7 +11,7 @@ before_script:
   - cp config/travis.exs config/test.exs
   - MIX_ENV=test
 script:
-  - mix deps.get --only test
-  - mix ecto.create
-  - mix ecto.migrate
-  - mix test
+  - MIX_ENV=test mix deps.get --only test
+  - MIX_ENV=test mix ecto.create
+  - MIX_ENV=test mix ecto.migrate
+  - MIX_ENV=test mix test
