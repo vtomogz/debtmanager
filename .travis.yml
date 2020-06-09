@@ -8,7 +8,7 @@ addons:
 service:
   - postgresql
 before_script:
-  - host all my_user localhost trust
+  -  sudo host all postgres localhost trust
   - cp config/travis.exs config/test.exs
   - MIX_ENV=test mix do ecto.create
 script:
