@@ -15,7 +15,7 @@ config :debtmanager, Debtmanager.Repo,
 # We don't run a server during test. If one is required,
 # you can enable the server option below.
 config :debtmanager, DebtmanagerWeb.Endpoint,
-  http: [port: 5433],
+  http: [port: 4002],
   server: false
 
 # Print only warnings and errors during test
