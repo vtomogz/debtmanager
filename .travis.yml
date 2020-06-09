@@ -5,17 +5,8 @@ otp_release:
   - '23.0'
 addons:
   postgresql: '11.7'
-before_install:
-  -sudo apt-get -y install nodejs
 before_script:
 - cp config/travis.exs config/test.exs
-- npm install -g brunch
-- npm install
-- brunch build --production
-- mix phoenix.digest
-- git config --global user.email "youremail@yourdomain.com"
-- git config --global user.name "Your Name"
-- git add priv && git commit -m "Heroku assets"
 - MIX_ENV=test mix do deps.get, deps.compile, ecto.create, ecto.migrate
 deploy:
   provider: heroku
