@@ -1,0 +1,62 @@
+<h1>My Friends</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Surname</th>
+      <th>Email</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for friendship <- @friendships do %>
+    <tr>
+      <td><%= friendship.name %></td>
+      <td><%= friendship.surname %></td>
+      <td><%= friendship.email %></td>
+
+      <td>
+        <span><%= link "Remove", to: Routes.friendship_path(@conn, :remove, email: friendship.email), method: :delete, data: [confirm: "Are you sure?"] %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+<h1>Add a new friend</h1>
+<%= render "form.html", Map.put(assigns, :action, Routes.friendship_path(@conn, :add)) %>
+<h1>
+  <%= case length(@friend_requests)do %>
+    <%= 0 -> %>
+    <%= 1 -> %> You have one pending request.
+    <%= number -> %>You have <%= number %> pending friend requests.
+  <% end %>
+</h1>
+<%= if length(@friend_requests) > 0 do %>
+  <table>
+    <thead>
+      <tr>
+        <th>UName</th>
+        <th>Surname</th>
+        <th>Email</th>
+
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+  <%= for request <- @friend_requests do %>
+      <tr>
+        <td><%= request.name %></td>
+        <td><%= request.surname %></td>
+        <td><%= request.email %></td>
+
+        <td>
+          <span><%= link "Accept", to: Routes.friendship_path(@conn, :accept, email: request.email), method: :put%></span>
+          <span><%= link "Deny", to: Routes.friendship_path(@conn, :deny, email: request.email), method: :delete, data: [confirm: "Are you sure?"] %></span>
+        </td>
+      </tr>
+  <% end %>
+    </tbody>
+  </table>
+<% end %>

@@ -28,7 +28,8 @@ config :phoenix, :json_library, Jason
 
 config :debtmanager, :pow,
   user: Debtmanager.Users.User,
-  repo: Debtmanager.Repo
+  repo: Debtmanager.Repo,
+  web_module: DebtmanagerWeb
 
 
 # Import environment specific config. This must remain at the bottom

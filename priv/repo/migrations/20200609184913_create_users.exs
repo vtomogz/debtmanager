@@ -5,6 +5,8 @@ defmodule Debtmanager.Repo.Migrations.CreateUsers do
     create table(:users) do
       add :email, :string, null: false
       add :password_hash, :string
+      add :name, :string
+      add :surname, :string
 
       timestamps()
     end
