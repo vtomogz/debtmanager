@@ -40,4 +40,11 @@ defmodule DebtmanagerWeb.ConnCase do
 
     {:ok, conn: Phoenix.ConnTest.build_conn()}
   end
+
+  setup %{conn: conn} do
+    user = %Debtmanager.Users.User{email: "qaz1@gmail.com"}
+    authed_conn = Pow.Plug.assign_current_user(conn, user, otp_app: :my_app)
+
+    {:ok, conn: conn, authed_conn: authed_conn}
+  end
 end

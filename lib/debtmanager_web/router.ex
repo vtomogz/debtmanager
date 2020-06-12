@@ -35,11 +35,18 @@ defmodule DebtmanagerWeb.Router do
     pipe_through [:browser, :protected]
 
     get "/friendships", FriendshipController, :index
-    post "/friendships", FriendshipController, :add
-    put "/friendships/accept", FriendshipController, :accept
-    delete "/friendships/deny", FriendshipController, :deny
-    delete "/friendships/remove", FriendshipController, :remove
+    post "/friendships/", FriendshipController, :add
+    put "/friendships/accept/", FriendshipController, :accept
+    delete "/friendships/deny/", FriendshipController, :deny
+    delete "/friendships/remove/", FriendshipController, :remove
   end
+
+  scope "/", DebtmanagerWeb do
+    pipe_through [:browser, :protected]
+
+    resources "/debts", DebtController
+  end
+
 
 
   # Other scopes may use custom stacks.

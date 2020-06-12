@@ -12,15 +12,14 @@ defmodule DebtmanagerWeb.FriendshipController do
   end
 
   def add(conn, %{"friendship" => friend}) do
-    IO.inspect(friend)
     case Friendships.add_friendship(friend, conn.assigns.current_user.email) do
-      {:ok, friendship} ->
+      {:ok, _friendship} ->
         conn
         |> put_flash(:info, "Friend request sended.")
         |> redirect(to: Routes.friendship_path(conn, :index))
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        IO.inspect([user2: {message, _tail}]=changeset.errors)
+        [user2: {message, _tail}]=changeset.errors
         conn
         |> put_flash(:error, message)
         |> redirect(to: Routes.friendship_path(conn, :index))
@@ -29,36 +28,64 @@ defmodule DebtmanagerWeb.FriendshipController do
 
   def accept(conn, %{"email" => email}) do
     friendship = Friendships.get_single_friendship_request(email, conn.assigns.current_user.email)
-
-    case Friendships.accept_friend_request(friendship) do
-      {:ok, friendship} ->
+    case friendship do
+      [] ->
         conn
-        |> put_flash(:info, "Friend request accepted.")
+        |> put_flash(:error, "Error occured.")
         |> redirect(to: Routes.friendship_path(conn, :index))
-
-      {:error, %Ecto.Changeset{} = changeset} ->
-        conn
-        |> put_flash(:error, changeset)
-        |> redirect(to: Routes.friendship_path(conn, :index))
-    end
+      [friends] ->
+        case Friendships.accept_friend_request(friends) do
+          {:ok, _friendship} ->
+            conn
+            |> put_flash(:info, "Friend request accepted.")
+            |> redirect(to: Routes.friendship_path(conn, :index))
+          {:error, _changeset} ->
+            conn
+            |> put_flash(:error, "Error occured.")
+            |> redirect(to: Routes.friendship_path(conn, :index))
+        end
+      end
   end
 
   def deny(conn, %{"email" => email}) do
     friendship = Friendships.get_single_friendship_request(email, conn.assigns.current_user.email)
-    {:ok, _friendship} = Friendships.deny_friendship(friendship)
-
-    conn
-    |> put_flash(:info, "Friend request rejected.")
-    |> redirect(to: Routes.friendship_path(conn, :index))
+    case friendship do
+      [] ->
+        conn
+        |> put_flash(:error, "Error occured.")
+        |> redirect(to: Routes.friendship_path(conn, :index))
+      [friends] ->
+        case Friendships.deny_friendship(friends) do
+          {:ok, _friendship} ->
+            conn
+            |> put_flash(:info, "Friend request rejected.")
+            |> redirect(to: Routes.friendship_path(conn, :index))
+          {:error, _changeset } ->
+            conn
+            |> put_flash(:error, "Error occured.")
+            |> redirect(to: Routes.friendship_path(conn, :index))
+        end
+    end
   end
 
   def remove(conn, %{"email" => email}) do
     friendship = Friendships.get_single_friendship_request(email, conn.assigns.current_user.email)
-    IO.inspect(friendship)
-    {:ok, _friendship} = Friendships.deny_friendship(friendship)
-
-    conn
-    |> put_flash(:info, "Friend deleted.")
-    |> redirect(to: Routes.friendship_path(conn, :index))
+    case friendship do
+      [] ->
+        conn
+        |> put_flash(:error, "Error occured.")
+        |> redirect(to: Routes.friendship_path(conn, :index))
+      [friends] ->
+        case Friendships.deny_friendship(friends) do
+          {:ok, _friendship} ->
+            conn
+            |> put_flash(:info, "Friend request rejected.")
+            |> redirect(to: Routes.friendship_path(conn, :index))
+          {:error, _changeset } ->
+            conn
+            |> put_flash(:error, "Error occured.")
+            |> redirect(to: Routes.friendship_path(conn, :index))
+        end
+    end
   end
 end

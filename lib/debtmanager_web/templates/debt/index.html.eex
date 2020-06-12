@@ -1,0 +1,32 @@
+<h1>Listing Debts</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Creator</th>
+      <th>Debtor</th>
+      <th>Value</th>
+      <th>Reminder</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for debt <- @debts do %>
+    <tr>
+      <td><%= debt.creator %></td>
+      <td><%= debt.debtor %></td>
+      <td><%= debt.value %></td>
+      <td><%= debt.reminder %></td>
+
+      <td>
+        <span><%= link "Show", to: Routes.debt_path(@conn, :show, debt) %></span>
+        <span><%= link "Edit", to: Routes.debt_path(@conn, :edit, debt) %></span>
+        <span><%= link "Delete", to: Routes.debt_path(@conn, :delete, debt), method: :delete, data: [confirm: "Are you sure?"] %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<span><%= link "New Debt", to: Routes.debt_path(@conn, :new) %></span>

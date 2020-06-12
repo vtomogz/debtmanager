@@ -1,5 +1,0 @@
-<h1>Edit Friendship</h1>
-
-<%= render "form.html", Map.put(assigns, :action, Routes.friendship_path(@conn, :update, @friendship)) %>
-
-<span><%= link "Back", to: Routes.friendship_path(@conn, :index) %></span>

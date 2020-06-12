@@ -1,88 +1,138 @@
 defmodule DebtmanagerWeb.FriendshipControllerTest do
   use DebtmanagerWeb.ConnCase
 
+
   alias Debtmanager.Friendships
 
-  @create_attrs %{accepted: true, user1: "some user1", user2: "some user2"}
-  @update_attrs %{accepted: false, user1: "some updated user1", user2: "some updated user2"}
-  @invalid_attrs %{accepted: nil, user1: nil, user2: nil}
+  @create_attrs %{user1: "qaz5@gmail.com", user2: "qaz4@gmail.com", accepted: false}
+  @update_attrs %{user1: "qaz5@gmail.com", user2: "qaz4@gmail.com", accepted: true}
+  @invalid_attrs %{creator: nil, debtor: nil, reminder: nil, value: nil}
 
   def fixture(:friendship) do
     {:ok, friendship} = Friendships.create_friendship(@create_attrs)
     friendship
   end
 
-  describe "index" do
-    test "lists all friendships", %{conn: conn} do
-      conn = get(conn, Routes.friendship_path(conn, :index))
-      assert html_response(conn, 200) =~ "Listing Friendships"
-    end
-  end
-
-  describe "new friendship" do
-    test "renders form", %{conn: conn} do
-      conn = get(conn, Routes.friendship_path(conn, :new))
-      assert html_response(conn, 200) =~ "New Friendship"
-    end
-  end
-
-  describe "create friendship" do
-    test "redirects to show when data is valid", %{conn: conn} do
-      conn = post(conn, Routes.friendship_path(conn, :create), friendship: @create_attrs)
-
-      assert %{id: id} = redirected_params(conn)
-      assert redirected_to(conn) == Routes.friendship_path(conn, :show, id)
-
-      conn = get(conn, Routes.friendship_path(conn, :show, id))
-      assert html_response(conn, 200) =~ "Show Friendship"
-    end
-
-    test "renders errors when data is invalid", %{conn: conn} do
-      conn = post(conn, Routes.friendship_path(conn, :create), friendship: @invalid_attrs)
-      assert html_response(conn, 200) =~ "New Friendship"
-    end
-  end
-
-  describe "edit friendship" do
-    setup [:create_friendship]
-
-    test "renders form for editing chosen friendship", %{conn: conn, friendship: friendship} do
-      conn = get(conn, Routes.friendship_path(conn, :edit, friendship))
-      assert html_response(conn, 200) =~ "Edit Friendship"
-    end
-  end
-
-  describe "update friendship" do
-    setup [:create_friendship]
-
-    test "redirects when data is valid", %{conn: conn, friendship: friendship} do
-      conn = put(conn, Routes.friendship_path(conn, :update, friendship), friendship: @update_attrs)
-      assert redirected_to(conn) == Routes.friendship_path(conn, :show, friendship)
-
-      conn = get(conn, Routes.friendship_path(conn, :show, friendship))
-      assert html_response(conn, 200) =~ "some updated user1"
-    end
-
-    test "renders errors when data is invalid", %{conn: conn, friendship: friendship} do
-      conn = put(conn, Routes.friendship_path(conn, :update, friendship), friendship: @invalid_attrs)
-      assert html_response(conn, 200) =~ "Edit Friendship"
-    end
-  end
-
-  describe "delete friendship" do
-    setup [:create_friendship]
-
-    test "deletes chosen friendship", %{conn: conn, friendship: friendship} do
-      conn = delete(conn, Routes.friendship_path(conn, :delete, friendship))
-      assert redirected_to(conn) == Routes.friendship_path(conn, :index)
-      assert_error_sent 404, fn ->
-        get(conn, Routes.friendship_path(conn, :show, friendship))
-      end
-    end
-  end
-
   defp create_friendship(_) do
     friendship = fixture(:friendship)
     %{friendship: friendship}
   end
+
+  describe "index" do
+    test "lists all friends, lists all friend requests, add friend form", %{authed_conn: authed_conn} do
+      conn = get(authed_conn, Routes.friendship_path(authed_conn, :index))
+      assert html_response(conn, 200) =~ "My Friends"
+      assert html_response(conn, 200) =~ "Add a new friend"
+      assert html_response(conn, 200) =~ "friend request"
+    end
+  end
+
+  describe "create friendship" do
+    test "redirects to index and showing info when data is valid", %{authed_conn: authed_conn} do
+      conn = post(authed_conn, Routes.friendship_path(authed_conn, :add), friendship: @create_attrs)
+
+      assert get_flash(conn, :info) == "Friend request sended."
+      assert redirected_to(conn) == Routes.friendship_path(conn, :index)
+
+      conn = get(authed_conn, Routes.friendship_path(authed_conn, :index))
+      assert html_response(conn, 200) =~ "My Friends"
+      assert html_response(conn, 200) =~ "Add a new friend"
+      assert html_response(conn, 200) =~ "friend request"
+    end
+
+    test "redirects to index and showing info when data is invalid", %{authed_conn: authed_conn} do
+      conn = post(authed_conn, Routes.friendship_path(authed_conn, :add), friendship: @invalid_attrs)
+
+      assert String.valid?(get_flash(conn, :error))
+      assert redirected_to(conn) == Routes.friendship_path(conn, :index)
+
+      conn = get(authed_conn, Routes.friendship_path(authed_conn, :index))
+      assert html_response(conn, 200) =~ "My Friends"
+      assert html_response(conn, 200) =~ "Add a new friend"
+      assert html_response(conn, 200) =~ "friend request"
+    end
+  end
+
+  describe "accept friend request" do
+
+    test "redirects to index and showing message when is valid", %{authed_conn: authed_conn} do
+      conn = put(authed_conn, Routes.friendship_path(authed_conn, :accept, email: "qaz5@gmail.com"))
+
+      assert get_flash(conn, :info) == "Friend request accepted."
+      assert redirected_to(conn) == Routes.friendship_path(conn, :index)
+
+      conn = get(authed_conn, Routes.friendship_path(authed_conn, :index))
+      assert html_response(conn, 200) =~ "My Friends"
+      assert html_response(conn, 200) =~ "Add a new friend"
+      assert html_response(conn, 200) =~ "friend request"
+    end
+
+    test "redirects to index and showing info when data is invalid", %{authed_conn: authed_conn} do
+      conn = put(authed_conn, Routes.friendship_path(authed_conn, :accept, email: nil))
+
+      assert String.valid?(get_flash(conn, :error))
+      IO.inspect(redirected_to(conn))
+      assert redirected_to(conn) == Routes.friendship_path(conn, :index)
+
+      conn = get(authed_conn, Routes.friendship_path(authed_conn, :index))
+      assert html_response(conn, 200) =~ "My Friends"
+      assert html_response(conn, 200) =~ "Add a new friend"
+      assert html_response(conn, 200) =~ "friend request"
+    end
+  end
+
+  describe "deny friend request" do
+
+    test "redirects to index and showing message when is valid", %{authed_conn: authed_conn} do
+      conn = delete(authed_conn, Routes.friendship_path(authed_conn, :deny, email: "qaz5@gmail.com"))
+
+      assert get_flash(conn, :info) == "Friend request rejected."
+      assert redirected_to(conn) == Routes.friendship_path(conn, :index)
+
+      conn = get(authed_conn, Routes.friendship_path(authed_conn, :index))
+      assert html_response(conn, 200) =~ "My Friends"
+      assert html_response(conn, 200) =~ "Add a new friend"
+      assert html_response(conn, 200) =~ "friend request"
+    end
+
+    test "redirects to index and showing info when data is invalid", %{authed_conn: authed_conn} do
+      conn = delete(authed_conn, Routes.friendship_path(authed_conn, :deny, email: nil))
+
+      assert String.valid?(get_flash(conn, :error))
+      assert redirected_to(conn) == Routes.friendship_path(conn, :index)
+
+      conn = get(authed_conn, Routes.friendship_path(authed_conn, :index))
+      assert html_response(conn, 200) =~ "My Friends"
+      assert html_response(conn, 200) =~ "Add a new friend"
+      assert html_response(conn, 200) =~ "friend request"
+    end
+  end
+
+  describe "remove friend relation" do
+
+    test "redirects to index and showing message when is valid", %{authed_conn: authed_conn} do
+      conn = delete(authed_conn, Routes.friendship_path(authed_conn, :remove, email: "qaz5@gmail.com"))
+
+      assert get_flash(conn, :info) == "Friend request rejected."
+      assert redirected_to(conn) == Routes.friendship_path(conn, :index)
+
+      conn = get(authed_conn, Routes.friendship_path(authed_conn, :index))
+      assert html_response(conn, 200) =~ "My Friends"
+      assert html_response(conn, 200) =~ "Add a new friend"
+      assert html_response(conn, 200) =~ "friend request"
+    end
+
+    test "redirects to index and showing info when data is invalid", %{authed_conn: authed_conn} do
+      conn = delete(authed_conn, Routes.friendship_path(authed_conn, :remove, email: nil))
+
+      assert String.valid?(get_flash(conn, :error))
+      assert redirected_to(conn) == Routes.friendship_path(conn, :index)
+
+      conn = get(authed_conn, Routes.friendship_path(authed_conn, :index))
+      assert html_response(conn, 200) =~ "My Friends"
+      assert html_response(conn, 200) =~ "Add a new friend"
+      assert html_response(conn, 200) =~ "friend request"
+    end
+  end
+
 end
