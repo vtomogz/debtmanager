@@ -6,9 +6,9 @@ defmodule Debtmanager.DebtsTest do
   describe "debts" do
     alias Debtmanager.Debts.Debt
 
-    @valid_attrs %{creator: "some creator", debtor: "some debtor", reminder: true, value: 42}
-    @update_attrs %{creator: "some updated creator", debtor: "some updated debtor", reminder: false, value: 43}
-    @invalid_attrs %{creator: nil, debtor: nil, reminder: nil, value: nil}
+    @valid_attrs %{creator: 1, debtor: 2, reminder: true, value: 42, paid: false}
+    @update_attrs %{creator: 1, debtor: 2, reminder: false, value: 43, paid: true}
+    @invalid_attrs %{creator: 1, debtor: 2, reminder: false, value: "sdfsd", paid: true}
 
     def debt_fixture(attrs \\ %{}) do
       {:ok, debt} =
@@ -31,8 +31,8 @@ defmodule Debtmanager.DebtsTest do
 
     test "create_debt/1 with valid data creates a debt" do
       assert {:ok, %Debt{} = debt} = Debts.create_debt(@valid_attrs)
-      assert debt.creator == "some creator"
-      assert debt.debtor == "some debtor"
+      assert debt.creator == 1
+      assert debt.debtor == 2
       assert debt.reminder == true
       assert debt.value == 42
     end
@@ -44,8 +44,8 @@ defmodule Debtmanager.DebtsTest do
     test "update_debt/2 with valid data updates the debt" do
       debt = debt_fixture()
       assert {:ok, %Debt{} = debt} = Debts.update_debt(debt, @update_attrs)
-      assert debt.creator == "some updated creator"
-      assert debt.debtor == "some updated debtor"
+      assert debt.creator == 1
+      assert debt.debtor == 2
       assert debt.reminder == false
       assert debt.value == 43
     end
@@ -66,5 +66,6 @@ defmodule Debtmanager.DebtsTest do
       debt = debt_fixture()
       assert %Ecto.Changeset{} = Debts.change_debt(debt)
     end
+
   end
 end

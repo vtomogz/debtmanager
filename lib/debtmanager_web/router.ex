@@ -28,7 +28,7 @@ defmodule DebtmanagerWeb.Router do
   scope "/", DebtmanagerWeb do
     pipe_through :browser
 
-    get "/", PageController, :index
+    get "/", DebtController, :overview
   end
 
   scope "/", DebtmanagerWeb do
@@ -44,8 +44,16 @@ defmodule DebtmanagerWeb.Router do
   scope "/", DebtmanagerWeb do
     pipe_through [:browser, :protected]
 
-    resources "/debts", DebtController
+    get "/debts", DebtController, :index
+    get "/debts/new", DebtController, :new
+    post "/debts", DebtController, :create
+    put "/debts/:id/remind", DebtController, :remind
+    put "/debts/:id/pay", DebtController, :pay
+    get "/debts/history", DebtController, :history
+    post "/debts/history", DebtController, :show
   end
+
+
 
 
 

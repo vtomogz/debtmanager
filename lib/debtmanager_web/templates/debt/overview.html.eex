@@ -1,0 +1,79 @@
+<%= if @conn.assigns.current_user do %>
+    <section class="section">
+      <p class="has-text-centered"><h1 class="title is-1"> My Summary <h1></p>
+      <div class="container">
+        <div class="columns is-centered">
+          <div class="column">
+            <div class="notification is-danger has-text-centered">
+              <h1 class="title is-2">Number of debts:<h1>
+              <h1 class="title is-1"> <%= Enum.at(@debts,0)%></h1>
+              <h1 class="title is-2">Total value of debts:<h1>
+              <h1 class="title is-1"> <%= Enum.at(@debts,1)%>$</h1>
+            </div>
+          </div>
+          <div class="column">
+            <div class="notification is-success has-text-centered">
+              <h1 class="title is-2">Number of loans:<h1>
+              <h1 class="title is-1"> <%= Enum.at(@charges,0)%></h1>
+              <h1 class="title is-2">Total value of loans:<h1>
+              <h1 class="title is-1 is-pulled-center"> <%= Enum.at(@charges,1)%>$</h1>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <p class="has-text-centered"><h1 class="title is-1"> Urgent Debts <h1></p>
+      <section class="section">
+        <%= if length(@reminders)>0 do %>
+          <div class="notification">
+            <div class="columns">
+              <div class="column is-2">
+                <h1 class="title is-3">Name</h1>
+              </div>
+              <div class="column is-2">
+                <h1 class="title is-3">Surname</h1>
+              </div>
+              <div class="column is-3">
+                <h1 class="title is-3">Email</h1>
+              </div>
+              <div class="column">
+                <h1 class="title is-3">Debt</h1>
+              </div>
+            </div>
+          </div>
+          <%= for reminder <- @reminders do %>
+            <div class="notification is-danger">
+              <div class="columns">
+                <div class="column is-2">
+                  <h1 class="title is-3"><%= reminder.user.name %></h1>
+                </div>
+                <div class="column is-2">
+                  <h1 class="title is-3"><%= reminder.user.surname %></h1>
+                </div>
+                <div class="column is-3">
+                  <h1 class="title is-3"><%= reminder.user.email %></h1>
+                </div>
+                <div class="column is-3">
+                  <h1 class="title is-3"><%= reminder.value %> $</h1>
+                </div>
+                <div class="column">
+                </div>
+                <div class="column is-1">
+                  <%= link raw(~s'<button class="is-pulled-right button is-danger is-outlined is-inverted">Pay</button>'), to: Routes.debt_path(@conn, :pay, reminder), method: :put, data: [confirm: "Have you paid this debt?"]%>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        <% else %>
+          <h1 class="title is-3">You don't have any urgent Debts.</h1>
+        <% end %>
+      </section>
+
+
+<% else %>
+  <section calss="section">
+    <div class="has-text-centered">
+      <p calss="is-centered"><h1 class="title is-centered is-1">Welcome. Create account and manage your debts easy. </h1></p>
+    </div>
+  </section>
+<% end %>

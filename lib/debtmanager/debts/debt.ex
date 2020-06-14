@@ -3,10 +3,11 @@ defmodule Debtmanager.Debts.Debt do
   import Ecto.Changeset
 
   schema "debts" do
-    field :creator, :string
-    field :debtor, :string
+    field :creator, :integer
+    field :debtor, :integer
     field :reminder, :boolean, default: false
     field :value, :integer
+    field :paid, :boolean
 
     timestamps()
   end
@@ -14,7 +15,11 @@ defmodule Debtmanager.Debts.Debt do
   @doc false
   def changeset(debt, attrs) do
     debt
-    |> cast(attrs, [:creator, :debtor, :value, :reminder])
-    |> validate_required([:creator, :debtor, :value, :reminder])
+    |> cast(attrs, [:creator, :debtor, :value, :reminder, :paid])
+    |> validate_required([:creator, :debtor, :value, :reminder, :paid])
+    |> validate_number(:value, greater_than: 0)
+
+
   end
+
 end

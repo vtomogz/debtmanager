@@ -79,7 +79,7 @@ defmodule DebtmanagerWeb.FriendshipController do
         case Friendships.deny_friendship(friends) do
           {:ok, _friendship} ->
             conn
-            |> put_flash(:info, "Friend request rejected.")
+            |> put_flash(:info, "Friend removed.")
             |> redirect(to: Routes.friendship_path(conn, :index))
           {:error, _changeset } ->
             conn

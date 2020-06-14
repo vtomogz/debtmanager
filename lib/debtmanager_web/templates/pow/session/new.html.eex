@@ -1,4 +1,6 @@
-<h1>Sign in</h1>
+<section class="section">
+<div class="contianer">
+<h1 class="title is-1">Sign in</h1>
 
 <%= form_for @changeset, @action, [as: :user], fn f -> %>
   <%= if @changeset.action do %>
@@ -8,17 +10,18 @@
   <% end %>
 
   <%= label f, Pow.Ecto.Schema.user_id_field(@changeset) %>
-  <%= text_input f, Pow.Ecto.Schema.user_id_field(@changeset) %>
+  <%= text_input f, Pow.Ecto.Schema.user_id_field(@changeset), class: "input is-link" %>
   <%= error_tag f, Pow.Ecto.Schema.user_id_field(@changeset) %>
 
   <%= label f, :password %>
-  <%= password_input f, :password %>
+  <%= password_input f, :password, class: "input is-link" %>
   <%= error_tag f, :password %>
-
-  <div>
-    <%= submit "Sign in" %>
   </div>
+  <%= submit "Sign in", class: "button is-link is-large" %>
 <% end %>
 
 
-<span><%= link "Register", to: Routes.pow_registration_path(@conn, :new) %></span>
+<p><%= link "Register", to: Routes.pow_registration_path(@conn, :new) %></p>
+
+
+</section>

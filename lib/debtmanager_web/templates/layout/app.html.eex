@@ -7,37 +7,70 @@
     <title>Debtmanager · Phoenix Framework</title>
     <link rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app.css") %>"/>
     <script defer type="text/javascript" src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css"/>
+
   </head>
   <body>
-    <header>
-      <section class="container">
-        <nav role="navigation">
-          <ul>
+      <section class="hero is-dark">
+        <div class="hero-body">
+          <div class="container">
             <%= if Pow.Plug.current_user(@conn) do %>
-              <li>
-                <%= @current_user.name %> <%= @current_user.surname %>
-              </li>
-              <li>
-                <%= link "Sign out", to: Routes.pow_session_path(@conn, :delete), method: :delete %>
-              </li>
+              <nav class="level">
+                <div class="level-left">
+                  <div class="level-item">
+                    <%= link raw(~s'<h1 class="title is-1">Debt Manager</h1>'), to: Routes.debt_path(@conn, :overview)%>
+                  </div>
+                </div>
+                <div class="level-right has-text-centered">
+                  <div class="level-item">
+                    <%= link "Overview", to: Routes.debt_path(@conn, :overview), class: "button is-black is-inverted is-outlined" %>
+                  </div>
+                  <div class="level-item has-text-centered">
+                    <%= link "My Friends", to: Routes.friendship_path(@conn, :index), class: "button is-black is-inverted is-outlined" %>
+                  </div>
+                  <div class="level-item has-text-centered">
+                    <%= link "Debt Managment", to: Routes.debt_path(@conn, :index), class: "button is-black is-inverted is-outlined" %>
+                  </div>
+                  <div class="level-item has-text-centered">
+                    <%= link "Debt History", to: Routes.debt_path(@conn, :history), class: "button is-black is-inverted is-outlined" %>
+                  </div>
+                </div>
+
+                <!-- Right side -->
+                <div class="level-right">
+                  <ul>
+                  <li>
+                    <h1 class="title">
+                      <%= @current_user.name %> <%= @current_user.surname %>
+                    </h1>
+                  </li>
+                  <li>
+                    <%= link "Sign out", to: Routes.pow_session_path(@conn, :delete), method: :delete, class: "button is-black is-inverted is-outlined is-small is-pulled-right" %>
+                  </li>
+                </ul>
+                </div>
+              </nav>
             <% else %>
-              <li>
-                <%= link "Register", to: Routes.pow_registration_path(@conn, :new) %>
-              </li>
-              <li>
-                <%= link "Sign In", to: Routes.pow_session_path(@conn, :new) %>
-              </li>
-            <% end %>
-            <%= if function_exported?(Routes, :live_dashboard_path, 2) do %>
-              <li><%= link "LiveDashboard", to: Routes.live_dashboard_path(@conn, :home) %></li>
-            <% end %>
-          </ul>
-        </nav>
-        <%= if Pow.Plug.current_user(@conn) do %>
-          <%= link "My Friends", to: Routes.friendship_path(@conn, :index) %>
-        <% end %>
+              <nav class="level">
+                <div class="level-right">
+                  <div class="level-item">
+                    <%= link raw(~s'<h1 class="title is-1">Debt Manager</h1>'), to: Routes.debt_path(@conn, :overview)%>
+                  </div>
+                </div>
+                <div class="level-right">
+                  <div class="level-item">
+                    <%= link "Register", to: Routes.pow_registration_path(@conn, :new), class: "button is-black is-inverted is-outlined is-small is-pulled-right" %>
+                  </div>
+                  <div class="level-item">
+                    <%= link "Sign In", to: Routes.pow_session_path(@conn, :new), class: "button is-black is-inverted is-outlined is-small is-pulled-right" %>
+                  </div>
+                  </ul>
+                </div>
+              </nav>
+            <%end %>
+          </div>
+        </div>
       </section>
-    </header>
     <main role="main" class="container">
       <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
       <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>

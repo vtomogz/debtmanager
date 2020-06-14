@@ -1,7 +1,15 @@
 /* This file is for your main application css. */
 @import "./phoenix.css";
 
-/* Alerts and form errors */
+html {
+  height: 100%;
+}
+
+body {
+  background-color: #cfcfcf;
+  min-height: 100%;
+}
+
 .alert {
   padding: 15px;
   margin-bottom: 20px;

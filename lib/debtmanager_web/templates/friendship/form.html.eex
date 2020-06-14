@@ -1,9 +1,0 @@
-<%= form_for @changeset, @action, fn f -> %>
-
-  <%= label f, "Email Adress:" %>
-  <%= text_input f, :user2 %>
-
-  <div>
-    <%= submit "Save" %>
-  </div>
-<% end %>

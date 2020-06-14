@@ -1,32 +1,64 @@
-<h1>Listing Debts</h1>
-
-<table>
-  <thead>
-    <tr>
-      <th>Creator</th>
-      <th>Debtor</th>
-      <th>Value</th>
-      <th>Reminder</th>
-
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-<%= for debt <- @debts do %>
-    <tr>
-      <td><%= debt.creator %></td>
-      <td><%= debt.debtor %></td>
-      <td><%= debt.value %></td>
-      <td><%= debt.reminder %></td>
-
-      <td>
-        <span><%= link "Show", to: Routes.debt_path(@conn, :show, debt) %></span>
-        <span><%= link "Edit", to: Routes.debt_path(@conn, :edit, debt) %></span>
-        <span><%= link "Delete", to: Routes.debt_path(@conn, :delete, debt), method: :delete, data: [confirm: "Are you sure?"] %></span>
-      </td>
-    </tr>
-<% end %>
-  </tbody>
-</table>
-
-<span><%= link "New Debt", to: Routes.debt_path(@conn, :new) %></span>
+<section class="section">
+  <div class="container">
+    <h1 class="title is-1">My Debts</h1>
+    <%= if length(@debts) > 0 do %>
+      <%= for group <- @debts do %>
+        <div class="columns">
+          <%= for element <- group do %>
+            <div class="column is-4">
+              <%=if element do%>
+                <%= if element.reminder do %>
+                  <div class="notification is-danger has-text-centered">
+                <% else %>
+                  <div class="notification is-warning has-text-centered">
+                <% end %>
+                  <p class="is-size-3"><%=element.user.name%> <%=element.user.surname%></p>
+                  <p class="is-size-5"><%=element.user.email%></p>
+                  <p class="is-size-3"><%=element.value%> $</p>
+                  <%= if element.reminder do %>
+                    <p class="is-size-3"><%= link raw(~s'<button class="is-centered button is-danger is-outlined is-inverted">Pay</button>'), to: Routes.debt_path(@conn, :pay, element), method: :put,data: [confirm: "Have you paid this debt?"] %>
+                  <% else %>
+                  <p class="is-size-3"><%= link raw(~s'<button class="is-centered button is-warning is-outlined is-inverted">Pay</button>'), to: Routes.debt_path(@conn, :pay, element), method: :put,data: [confirm: "Have you paid this debt?"] %>
+                  <% end %>
+                  <%= if element.reminder do %>
+                    <p class="is-size-5">Status: Urgent</p>
+                  <% else %>
+                    <p class="is-size-5">Status: Normal</p>
+                  <% end %>
+                </div>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+    <% else %>
+      <h1 class="title is-3">You don't have any Debts.</h1>
+    <% end %>
+  </div>
+</section>
+<section class="section">
+  <div class="container">
+    <h1 class="title is-1">My Loans</h1>
+    <%= if length(@charges)>0 do %>
+      <%= for group <- @charges do %>
+        <div class="columns">
+          <%= for element <- group do %>
+            <div class="column is-4">
+              <%=if element do%>
+                <div class="notification is-success has-text-centered">
+                  <p class="is-size-3"><%=element.user.name%> <%=element.user.surname%></p>
+                  <p class="is-size-5"><%=element.user.email%></p>
+                  <p class="is-size-3"><%=element.value%> $</p>
+                  <p class="is-size-3"><%= link raw(~s'<button class="is-centered button is-success is-outlined is-inverted">Remind</button>'), to: Routes.debt_path(@conn, :remind, element), method: :put%>
+                </div>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+    <% else %>
+      <h1 class="title is-3">You don't have any Loans.</h1>
+    <% end %>
+    <span><%= link raw(~s'<button class="button is-large is-link"> Create a Loan</button>'), to: Routes.debt_path(@conn, :new) %></span>
+  </div>
+</section>

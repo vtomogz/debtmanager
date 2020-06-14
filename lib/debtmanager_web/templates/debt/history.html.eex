@@ -1,0 +1,99 @@
+
+<section class="section">
+<div class="container field control">
+<h1 class="title is-1">Debts History</h1>
+<%= if length(@friends)>0 do %>
+  <%= form_for @changeset, Routes.debt_path(@conn, :show), fn f -> %>
+    <%= if @changeset.action do %>
+      <div class="alert alert-danger">
+        <p>Oops, something went wrong! Please check the errors below.</p>
+      </div>
+    <% end %>
+
+    <%= label f, "Select friend from a list:" %>
+    <%= if @id != 0 do%>
+
+      <%= select f, :debtor, @friends, class: "select is-multiple field is-link is-large", value: @id%>
+    <% else %>
+      <%= select f, :debtor, @friends, class: "select is-multiple field is-link is-large"%>
+    <% end %>
+
+  </div>
+  <div class="container">
+    <%= submit "Show", class: "button is-link is-large" %>
+
+
+  <% end %>
+<% else %>
+  <h1 class="title is-3">You don't have any Friends yet.</h1>
+<% end %>
+
+</div>
+</section>
+<section class="section">
+  <div class="container">
+
+    <%= if @debts != "xd" do %>
+      <h1 class="title is-1">Debts History</h1><div class="container">
+    <%= if @debts == [] do %>
+      <h1 class="title is-2">You dont have any debt history.</h1>
+    <% else %>
+      <%= for debt <- @debts do %>
+        <div class="notification is-danger">
+          <div class="columns">
+            <div class="column">
+              <%= debt.user.name %>
+            </div>
+            <div class="column">
+              <%= debt.user.surname %>
+            </div>
+            <div class="column">
+              <%= debt.user.email %>
+            </div>
+            <div class="column">
+              <%= debt.value %>$
+            </div>
+            <div class="column">
+              Paid: <%= NaiveDateTime.to_string(debt.user.updated_at) %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
+    </div>
+    <% end %>
+  </div>
+</section>
+<section class="section">
+  <div class="container">
+    <%= if @charges != "xd" do %>
+      <h1 class="title is-1">Loans History</h1><div class="container">
+    <%= if @charges == [] do %>
+      <h1 class="title is-2">You dont have any loan history.</h1>
+    <% else %>
+      <%= for charg <- @charges do %>
+        <div class="notification is-success">
+          <div class="columns">
+            <div class="column">
+              <%= charg.user.name %>
+            </div>
+            <div class="column">
+              <%= charg.user.surname %>
+            </div>
+            <div class="column">
+              <%= charg.user.email %>
+            </div>
+            <div class="column">
+              <%= charg.value %>$
+            </div>
+            <div class="column">
+              Paid: <%= NaiveDateTime.to_string(charg.user.updated_at) %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
+    </div>
+    <% end %>
+  </div>
+</section>

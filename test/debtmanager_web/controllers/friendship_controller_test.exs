@@ -22,8 +22,8 @@ defmodule DebtmanagerWeb.FriendshipControllerTest do
     test "lists all friends, lists all friend requests, add friend form", %{authed_conn: authed_conn} do
       conn = get(authed_conn, Routes.friendship_path(authed_conn, :index))
       assert html_response(conn, 200) =~ "My Friends"
-      assert html_response(conn, 200) =~ "Add a new friend"
-      assert html_response(conn, 200) =~ "friend request"
+      assert html_response(conn, 200) =~ "Add Friend"
+      assert html_response(conn, 200) =~ "Friends Requests"
     end
   end
 
@@ -36,8 +36,8 @@ defmodule DebtmanagerWeb.FriendshipControllerTest do
 
       conn = get(authed_conn, Routes.friendship_path(authed_conn, :index))
       assert html_response(conn, 200) =~ "My Friends"
-      assert html_response(conn, 200) =~ "Add a new friend"
-      assert html_response(conn, 200) =~ "friend request"
+      assert html_response(conn, 200) =~ "Add Friend"
+      assert html_response(conn, 200) =~ "Friends Requests"
     end
 
     test "redirects to index and showing info when data is invalid", %{authed_conn: authed_conn} do
@@ -48,8 +48,8 @@ defmodule DebtmanagerWeb.FriendshipControllerTest do
 
       conn = get(authed_conn, Routes.friendship_path(authed_conn, :index))
       assert html_response(conn, 200) =~ "My Friends"
-      assert html_response(conn, 200) =~ "Add a new friend"
-      assert html_response(conn, 200) =~ "friend request"
+      assert html_response(conn, 200) =~ "Add Friend"
+      assert html_response(conn, 200) =~ "Friends Requests"
     end
   end
 
@@ -63,8 +63,8 @@ defmodule DebtmanagerWeb.FriendshipControllerTest do
 
       conn = get(authed_conn, Routes.friendship_path(authed_conn, :index))
       assert html_response(conn, 200) =~ "My Friends"
-      assert html_response(conn, 200) =~ "Add a new friend"
-      assert html_response(conn, 200) =~ "friend request"
+      assert html_response(conn, 200) =~ "Add Friend"
+      assert html_response(conn, 200) =~ "Friends Requests"
     end
 
     test "redirects to index and showing info when data is invalid", %{authed_conn: authed_conn} do
@@ -76,8 +76,8 @@ defmodule DebtmanagerWeb.FriendshipControllerTest do
 
       conn = get(authed_conn, Routes.friendship_path(authed_conn, :index))
       assert html_response(conn, 200) =~ "My Friends"
-      assert html_response(conn, 200) =~ "Add a new friend"
-      assert html_response(conn, 200) =~ "friend request"
+      assert html_response(conn, 200) =~ "Add Friend"
+      assert html_response(conn, 200) =~ "Friends Requests"
     end
   end
 
@@ -91,8 +91,8 @@ defmodule DebtmanagerWeb.FriendshipControllerTest do
 
       conn = get(authed_conn, Routes.friendship_path(authed_conn, :index))
       assert html_response(conn, 200) =~ "My Friends"
-      assert html_response(conn, 200) =~ "Add a new friend"
-      assert html_response(conn, 200) =~ "friend request"
+      assert html_response(conn, 200) =~ "Add Friend"
+      assert html_response(conn, 200) =~ "Friends Requests"
     end
 
     test "redirects to index and showing info when data is invalid", %{authed_conn: authed_conn} do
@@ -103,8 +103,8 @@ defmodule DebtmanagerWeb.FriendshipControllerTest do
 
       conn = get(authed_conn, Routes.friendship_path(authed_conn, :index))
       assert html_response(conn, 200) =~ "My Friends"
-      assert html_response(conn, 200) =~ "Add a new friend"
-      assert html_response(conn, 200) =~ "friend request"
+      assert html_response(conn, 200) =~ "Add Friend"
+      assert html_response(conn, 200) =~ "Friends Requests"
     end
   end
 
@@ -113,13 +113,13 @@ defmodule DebtmanagerWeb.FriendshipControllerTest do
     test "redirects to index and showing message when is valid", %{authed_conn: authed_conn} do
       conn = delete(authed_conn, Routes.friendship_path(authed_conn, :remove, email: "qaz5@gmail.com"))
 
-      assert get_flash(conn, :info) == "Friend request rejected."
+      assert get_flash(conn, :info) == "Friend removed."
       assert redirected_to(conn) == Routes.friendship_path(conn, :index)
 
       conn = get(authed_conn, Routes.friendship_path(authed_conn, :index))
       assert html_response(conn, 200) =~ "My Friends"
-      assert html_response(conn, 200) =~ "Add a new friend"
-      assert html_response(conn, 200) =~ "friend request"
+      assert html_response(conn, 200) =~ "Add Friend"
+      assert html_response(conn, 200) =~ "Friends Requests"
     end
 
     test "redirects to index and showing info when data is invalid", %{authed_conn: authed_conn} do
@@ -130,8 +130,8 @@ defmodule DebtmanagerWeb.FriendshipControllerTest do
 
       conn = get(authed_conn, Routes.friendship_path(authed_conn, :index))
       assert html_response(conn, 200) =~ "My Friends"
-      assert html_response(conn, 200) =~ "Add a new friend"
-      assert html_response(conn, 200) =~ "friend request"
+      assert html_response(conn, 200) =~ "Add Friend"
+      assert html_response(conn, 200) =~ "Friends Requests"
     end
   end
 
