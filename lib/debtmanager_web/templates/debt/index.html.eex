@@ -31,9 +31,12 @@
           <% end %>
         </div>
       <% end %>
+      <span><%= link raw(~s'<button class="button is-large is-link">Cash Transfer</button>'), to: Routes.debt_path(@conn, :custompay) %></span>
     <% else %>
       <h1 class="title is-3">You don't have any Debts.</h1>
+
     <% end %>
+
   </div>
 </section>
 <section class="section">

@@ -71,7 +71,6 @@ defmodule DebtmanagerWeb.FriendshipControllerTest do
       conn = put(authed_conn, Routes.friendship_path(authed_conn, :accept, email: nil))
 
       assert String.valid?(get_flash(conn, :error))
-      IO.inspect(redirected_to(conn))
       assert redirected_to(conn) == Routes.friendship_path(conn, :index)
 
       conn = get(authed_conn, Routes.friendship_path(authed_conn, :index))

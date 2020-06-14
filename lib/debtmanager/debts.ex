@@ -20,6 +20,52 @@ defmodule Debtmanager.Debts do
 
   """
 
+  def debts_paid(value, id, my_id) do
+    if value==0 do
+      :ok
+    else
+      debt = get_debts(id, my_id) |> List.first
+      if debt.value<=value do
+        d = get_debt!(debt.id)
+        pay(d)
+        debts_paid(value-debt.value,id,my_id)
+      else
+        if debt.value>value do
+          d = get_debt!(debt.id)
+          decrease(d,debt.value-value)
+          debts_paid(0,id,my_id)
+        end
+      end
+    end
+  end
+
+  def get_debts(id, my_id) do
+    query = from d in Debt, where: d.debtor==^my_id and d.creator==^id and d.paid==false
+    Repo.all(query)
+  end
+
+  def get_debts_value(id, my_id) do
+    query = from d in Debt, where: d.debtor==^my_id and d.creator==^id and d.paid==false, select: d.value
+    Repo.all(query)
+    |> Enum.sum
+  end
+
+  def list_my_friends_debt(id) do
+    query = from d in Debt, where: d.debtor==^id and d.paid==false, distinct: d.creator
+    Repo.all(query)
+    |> get_users_info
+
+  end
+
+  def get_users_info(debts) do
+    users = for debt <- debts do
+      query = from u in User, where: u.id==^debt.creator
+      Repo.all(query)
+    end
+    List.flatten(users)
+  end
+
+
   def get_old_debts(id, my_id) do
     query = from d in Debt, where: d.creator==^id and d.debtor==^my_id and d.paid==true
     Repo.all(query)
@@ -57,8 +103,8 @@ defmodule Debtmanager.Debts do
   end
 
   def get_debtors_info(debts) do
-    debtors = for debt <- debts do
-      %Debtu{id: debt.id, user: Repo.get!(User, debt.debtor), value: debt.value}
+    for debt <- debts do
+      %Debtu{id: debt.id, user: Repo.get!(User, debt.debtor), value: debt.value, updated_at: debt.updated_at}
     end
   end
 
@@ -69,8 +115,8 @@ defmodule Debtmanager.Debts do
   end
 
   def get_creators_info(debts) do
-    creators = for debt <- debts do
-      %Debtu{id: debt.id, user: Repo.get!(User, debt.creator), value: debt.value, reminder: debt.reminder}
+    for debt <- debts do
+      %Debtu{id: debt.id, user: Repo.get!(User, debt.creator), value: debt.value, reminder: debt.reminder, updated_at: debt.updated_at}
     end
   end
 
@@ -150,6 +196,11 @@ defmodule Debtmanager.Debts do
 
   def remind(debt) do
     attrs= %{reminder: true}
+    update_debt(debt, attrs)
+  end
+
+  def decrease(debt, size) do
+    attrs= %{value: size}
     update_debt(debt, attrs)
   end
 

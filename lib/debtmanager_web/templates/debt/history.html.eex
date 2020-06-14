@@ -54,7 +54,7 @@
               <%= debt.value %>$
             </div>
             <div class="column">
-              Paid: <%= NaiveDateTime.to_string(debt.user.updated_at) %>
+              Paid: <%= NaiveDateTime.to_string(debt.updated_at) %>
             </div>
           </div>
         </div>
@@ -87,7 +87,7 @@
               <%= charg.value %>$
             </div>
             <div class="column">
-              Paid: <%= NaiveDateTime.to_string(charg.user.updated_at) %>
+              Paid: <%= NaiveDateTime.to_string(charg.updated_at) %>
             </div>
           </div>
         </div>

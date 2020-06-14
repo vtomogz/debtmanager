@@ -71,9 +71,17 @@
 
 
 <% else %>
-  <section calss="section">
-    <div class="has-text-centered">
-      <p calss="is-centered"><h1 class="title is-centered is-1">Welcome. Create account and manage your debts easy. </h1></p>
+<section class="section">
+</section>
+    <div class="container">
+    <div class="container has-text-centered">
+      <div class="notification is-dark">
+      <p><h1 class="title is-2">Welcome. Create an account and manage your debts easy. </h1></p>
+      <div calss="container">
+        <img class="is-pulled-center" src="<%= Routes.static_path(@conn, "/images/pic.jpg") %>" style="width: 60%; align: center;">
+      </div>
     </div>
-  </section>
+    </div>
+
+  </div>
 <% end %>

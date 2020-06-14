@@ -1,8 +1,6 @@
 defmodule DebtmanagerWeb.DebtController do
   use DebtmanagerWeb, :controller
 
-  import Debtmanager.Friendships
-
   alias Debtmanager.Debts
   alias Debtmanager.Debts.Debt
   alias Debtmanager.Friendships
@@ -33,13 +31,12 @@ defmodule DebtmanagerWeb.DebtController do
 
   def create(conn, %{"debt" => debt_params}) do
     case Debts.add_debt(conn.assigns.current_user.id, debt_params) do
-      {:ok, debt} ->
+      {:ok, _debt} ->
         conn
         |> put_flash(:info, "Loan created succesfully.")
         |> redirect(to: Routes.debt_path(conn, :index))
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        IO.inspect(changeset.errors)
         [value: {message, _tail}] = changeset.errors
         conn
         |> put_flash(:error, message)
@@ -51,12 +48,12 @@ defmodule DebtmanagerWeb.DebtController do
     debt = Debts.get_debt!(id)
 
     case Debts.remind(debt) do
-      {:ok, debt} ->
+      {:ok, _debt} ->
         conn
         |> put_flash(:info, "Debtor has been urged.")
         |> redirect(to: Routes.debt_path(conn, :index))
 
-      {:error, %Ecto.Changeset{} = changeset} ->
+      {:error, _changeset} ->
         conn
         |> put_flash(:info, "Error occured.")
         |> redirect(to: Routes.debt_path(conn, :index))
@@ -67,13 +64,12 @@ defmodule DebtmanagerWeb.DebtController do
     debt = Debts.get_debt!(id)
 
     case Debts.pay(debt) do
-      {:ok, debt} ->
-        IO.inspect(debt)
+      {:ok, _debt} ->
         conn
         |> put_flash(:info, "Debt marked as a paid.")
         |> redirect(to: Routes.debt_path(conn, :index))
 
-      {:error, %Ecto.Changeset{} = changeset} ->
+      {:error, _changeset} ->
         conn
         |> put_flash(:info, "Error occured.")
         |> redirect(to: Routes.debt_path(conn, :index))
@@ -81,7 +77,6 @@ defmodule DebtmanagerWeb.DebtController do
   end
 
   def history(conn, params) do
-    IO.inspect(params)
     if params != %{} do
       friends = Friendships.list_my_friends(conn.assigns.current_user.email) |> Enum.map(&{"#{&1.name} #{&1.surname}, #{&1.email}", &1.id})
       changeset = Debts.change_debt(%Debt{creator: conn.assigns.current_user.id})
@@ -100,6 +95,33 @@ defmodule DebtmanagerWeb.DebtController do
     %{"debtor" => id} = debt
     conn
     |>redirect(to: Routes.debt_path(conn, :history, id: id))
+  end
 
+  def custompay(conn, _params) do
+    friends = Debts.list_my_friends_debt(conn.assigns.current_user.id)  |> Enum.map(&{"#{&1.name} #{&1.surname}, #{&1.email}", &1.id})
+    changeset = Debts.change_debt(%Debt{})
+    render(conn, "custompay.html", changeset: changeset, friends: friends)
+  end
+
+  def custom(conn, %{"debt" => debt}) do
+    {id, _tail} = Integer.parse(debt["debtor"])
+    case Integer.parse(debt["value"]) do
+      :error ->
+        conn
+        |> put_flash(:error,"Wrong cash transfer size.")
+        |> redirect(to: Routes.debt_path(conn, :custompay))
+      {value ,_tail} ->
+        debt_value = Debts.get_debts_value(id, conn.assigns.current_user.id)
+        if value>0 and value<=debt_value do
+          Debts.debts_paid(value,id, conn.assigns.current_user.id)
+          conn
+          |> put_flash(:info,"Debts paid succesfully.")
+          |> redirect(to: Routes.debt_path(conn, :index))
+        else
+          conn
+          |> put_flash(:error,"Wrong cash transfer size.")
+          |> redirect(to: Routes.debt_path(conn, :custompay))
+        end
+    end
   end
 end

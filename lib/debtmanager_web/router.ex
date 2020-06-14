@@ -51,6 +51,8 @@ defmodule DebtmanagerWeb.Router do
     put "/debts/:id/pay", DebtController, :pay
     get "/debts/history", DebtController, :history
     post "/debts/history", DebtController, :show
+    get "/debts/custompay", DebtController, :custompay
+    put "/debts/custompay", DebtController, :custom
   end
 
 

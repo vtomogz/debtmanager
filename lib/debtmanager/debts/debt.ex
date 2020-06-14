@@ -17,7 +17,7 @@ defmodule Debtmanager.Debts.Debt do
     debt
     |> cast(attrs, [:creator, :debtor, :value, :reminder, :paid])
     |> validate_required([:creator, :debtor, :value, :reminder, :paid])
-    |> validate_number(:value, greater_than: 0)
+    |> validate_number(:value, greater_than: 0, less_than: 2147483647)
 
 
   end

@@ -40,7 +40,7 @@
                 <div class="level-right">
                   <ul>
                   <li>
-                    <h1 class="title">
+                    <h1 class="title is-4">
                       <%= @current_user.name %> <%= @current_user.surname %>
                     </h1>
                   </li>
